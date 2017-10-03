@@ -50,9 +50,3 @@ class Database(object):
     def commit(self):
         if self.conn:
             self.conn.commit()
-
-
-
-
-
-

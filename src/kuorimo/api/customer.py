@@ -61,8 +61,3 @@ if __name__ == '__main__':
     db = Database()
     insert_customer(db, 29, 'Pori')
     show_customers(db)
-
-
-
-
-
