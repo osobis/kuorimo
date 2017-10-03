@@ -54,7 +54,8 @@ def add_order(d):
     order_date = ''
     while True:
         if not order_date:
-            order_date = str(dateutil.parser.parse(raw_input('Date [{}]: '.format(str(datetime.today().date())))).date())
+            order_date = dateutil.parser.parse(raw_input('Date [{}]: '.format(str(datetime.today().date())))).date()
+            order_date = str(order_date)
         else:
             input_str = 'Date [{}]: '.format(order_date)
             new_date = raw_input(input_str)
@@ -66,7 +67,7 @@ def add_order(d):
         try:
             customer_name = get_customer_name(d, customer_number)
             product_name = get_product_name(d, product_number)
-        except Exception ,err:
+        except Exception, err:
             print ("ERROR: Failed to fetch customer/product details. Error: ", str(err))
             continue
         print
@@ -156,10 +157,9 @@ def modify_product(d):
 
 
 @press_enter
-def generate_monthly_report(d):
+def generate_monthly_report():
 
     home_dir = expanduser("~")
-    today = datetime.today()
     print 'To generate the xls report please specify the following:'
     year = raw_input('Enter year (YYYY): ')
     month = raw_input('Enter month (MM): ')
@@ -211,7 +211,7 @@ def menu():
     reports_menu = CursesMenu("Reports")
 
     reports_menu.append_item(FunctionItem("Generate daily report", not_implemented, ['Daily report']))
-    reports_menu.append_item(FunctionItem("Generate monthly report", generate_monthly_report, [d]))
+    reports_menu.append_item(FunctionItem("Generate monthly report", generate_monthly_report, []))
     reports_menu.append_item(FunctionItem("Generate yearly report", not_implemented, ['Yearly report']))
 
     reports_submenu_item = SubmenuItem("Reports", submenu=reports_menu)

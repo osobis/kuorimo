@@ -110,7 +110,6 @@ def generate_report(year, month, path):
     g.generate_report()
     return os.path.exists(path)
 
-if __name__ == '__main__':
 
-    path = '/Users/skocle/Desktop/demo.xlsx'
-    generate_report(2017, 9, path)
+if __name__ == '__main__':
+    generate_report(2017, 9, '/Users/skocle/Desktop/demo.xlsx')
