@@ -226,13 +226,5 @@ def menu():
     main_menu.join()
 
 
-import time
-
-def loop():
-    while True:
-        time.sleep(1)
-
-
 if __name__ == '__main__':
-    #menu()
-    loop()
+    menu()
