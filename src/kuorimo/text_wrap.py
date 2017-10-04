@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 class Table(object):
     def __init__(self, *columns):
         self.columns = columns
@@ -42,6 +43,7 @@ class Table(object):
             self.name = name
             self.width = max(len(x) for x in data + [name])
             self.format = ' %%%s%ds ' % (align, self.width)
+
 
 def wrap_customer(results):
     numbers = []
@@ -94,9 +96,9 @@ def wrap_order(results):
 if __name__ == '__main__':
 
     Column = Table.Column
-    nums = [ '1', '2', '3', '4' ]
-    speeds = [ '100', '10000', '1500', '12' ]
-    desc = [ '', 'label 1', 'none', u'very long descriptiona a aaaaaaaa' ]
+    nums = ['1', '2', '3', '4']
+    speeds = ['100', '10000', '1500', '12']
+    desc = ['', 'label 1', 'none', u'very long descriptiona a aaaaaaaa']
     print Table(
         Column('NUM', nums),
         Column('SPEED', speeds),

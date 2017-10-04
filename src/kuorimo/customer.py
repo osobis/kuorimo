@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from kuorimo.misc.database import Database, iter_db_results
-from kuorimo.misc.text_wrap import wrap_customer
+from database import Database, iter_db_results
+from text_wrap import wrap_customer
 
 
 def show_customers(d, size=20):
@@ -58,13 +58,6 @@ def delete_customer_by_number(d, customer_number):
 
 
 if __name__ == '__main__':
-    d = Database()
-
-    insert_customer(d, 29, 'Pori')
-    #delete_customer_by_number(d, 26)
-
-    show_customers(d)
-
-
-
-
+    db = Database()
+    insert_customer(db, 29, 'Pori')
+    show_customers(db)

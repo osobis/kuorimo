@@ -21,7 +21,7 @@ def iter_db_results(db_result, size, wrap_func):
 
 class Database(object):
 
-    def __init__(self, db_name='/Users/skocle/kuorimo.db'):
+    def __init__(self, db_name):
         self.db_name = db_name
         self.conn = None
 
@@ -50,9 +50,3 @@ class Database(object):
     def commit(self):
         if self.conn:
             self.conn.commit()
-
-
-
-
-
-

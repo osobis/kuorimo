@@ -3,8 +3,8 @@
 
 from datetime import datetime
 
-from kuorimo.misc.database import iter_db_results
-from kuorimo.misc.text_wrap import wrap_order
+from database import iter_db_results
+from text_wrap import wrap_order
 
 
 def show_orders(d, year=None, month=None, size=20):

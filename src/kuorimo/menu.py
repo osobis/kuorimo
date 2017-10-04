@@ -9,12 +9,13 @@ from os.path import expanduser
 import dateutil.parser
 from cursesmenu import *
 from cursesmenu.items import *
-from kuorimo.api.customer import (show_customers, insert_customer, show_customer,
+
+from customer import (show_customers, insert_customer, show_customer,
                                   edit_customer_by_number, get_customer_name)
-from kuorimo.api.order import show_orders, insert_order, show_order, delete_order_by_id
-from kuorimo.api.product import show_products, show_product, get_product_name, edit_product_by_number, insert_product
-from kuorimo.api.report import generate_report
-from kuorimo.misc.database import Database
+from database import Database
+from order import show_orders, insert_order, show_order, delete_order_by_id
+from product import show_products, show_product, get_product_name, edit_product_by_number, insert_product
+from report import generate_report
 
 
 def press_enter(f):
@@ -54,7 +55,8 @@ def add_order(d):
     order_date = ''
     while True:
         if not order_date:
-            order_date = str(dateutil.parser.parse(raw_input('Date [{}]: '.format(str(datetime.today().date())))).date())
+            order_date = dateutil.parser.parse(raw_input('Date [{}]: '.format(str(datetime.today().date())))).date()
+            order_date = str(order_date)
         else:
             input_str = 'Date [{}]: '.format(order_date)
             new_date = raw_input(input_str)
@@ -66,7 +68,7 @@ def add_order(d):
         try:
             customer_name = get_customer_name(d, customer_number)
             product_name = get_product_name(d, product_number)
-        except Exception ,err:
+        except Exception, err:
             print ("ERROR: Failed to fetch customer/product details. Error: ", str(err))
             continue
         print
@@ -156,10 +158,9 @@ def modify_product(d):
 
 
 @press_enter
-def generate_monthly_report(d):
+def generate_monthly_report():
 
     home_dir = expanduser("~")
-    today = datetime.today()
     print 'To generate the xls report please specify the following:'
     year = raw_input('Enter year (YYYY): ')
     month = raw_input('Enter month (MM): ')
@@ -173,7 +174,7 @@ def generate_monthly_report(d):
 
 def menu():
 
-    d = Database()
+    d = Database('/Users/skocle/kuorimo.db')
 
     main_menu = CursesMenu("KUORIMO OY")
 
@@ -211,7 +212,7 @@ def menu():
     reports_menu = CursesMenu("Reports")
 
     reports_menu.append_item(FunctionItem("Generate daily report", not_implemented, ['Daily report']))
-    reports_menu.append_item(FunctionItem("Generate monthly report", generate_monthly_report, [d]))
+    reports_menu.append_item(FunctionItem("Generate monthly report", generate_monthly_report, []))
     reports_menu.append_item(FunctionItem("Generate yearly report", not_implemented, ['Yearly report']))
 
     reports_submenu_item = SubmenuItem("Reports", submenu=reports_menu)
