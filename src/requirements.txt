@@ -1,0 +1,3 @@
+curses-menu
+xlsxwriter
+python-dateutil

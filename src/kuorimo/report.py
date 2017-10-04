@@ -6,8 +6,9 @@ from collections import defaultdict
 from string import ascii_uppercase
 
 import xlsxwriter
+from database import Database
+
 from customer import get_customers
-from kuorimo.misc.database import Database
 from product import get_products
 
 

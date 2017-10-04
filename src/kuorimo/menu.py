@@ -9,12 +9,13 @@ from os.path import expanduser
 import dateutil.parser
 from cursesmenu import *
 from cursesmenu.items import *
-from kuorimo.api.customer import (show_customers, insert_customer, show_customer,
+
+from customer import (show_customers, insert_customer, show_customer,
                                   edit_customer_by_number, get_customer_name)
-from kuorimo.api.order import show_orders, insert_order, show_order, delete_order_by_id
-from kuorimo.api.product import show_products, show_product, get_product_name, edit_product_by_number, insert_product
-from kuorimo.api.report import generate_report
-from kuorimo.misc.database import Database
+from database import Database
+from order import show_orders, insert_order, show_order, delete_order_by_id
+from product import show_products, show_product, get_product_name, edit_product_by_number, insert_product
+from report import generate_report
 
 
 def press_enter(f):
@@ -173,7 +174,7 @@ def generate_monthly_report():
 
 def menu():
 
-    d = Database()
+    d = Database('/Users/skocle/kuorimo.db')
 
     main_menu = CursesMenu("KUORIMO OY")
 
@@ -225,5 +226,13 @@ def menu():
     main_menu.join()
 
 
+import time
+
+def loop():
+    while True:
+        time.sleep(1)
+
+
 if __name__ == '__main__':
-    menu()
+    #menu()
+    loop()

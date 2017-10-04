@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from kuorimo.misc.database import Database, iter_db_results
-from kuorimo.misc.text_wrap import wrap_customer
+from database import Database, iter_db_results
+from text_wrap import wrap_customer
 
 
 def show_customers(d, size=20):

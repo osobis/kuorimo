@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from kuorimo.misc.database import iter_db_results
-from kuorimo.misc.text_wrap import wrap_product
+from database import iter_db_results
+from text_wrap import wrap_product
 
 
 def show_products(d, size=20):
