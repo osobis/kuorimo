@@ -174,7 +174,7 @@ def generate_monthly_report():
 
 def menu():
 
-    d = Database('/Users/skocle/kuorimo.db')
+    d = Database()
 
     main_menu = CursesMenu("KUORIMO OY")
 
@@ -212,7 +212,7 @@ def menu():
     reports_menu = CursesMenu("Reports")
 
     reports_menu.append_item(FunctionItem("Generate daily report", not_implemented, ['Daily report']))
-    reports_menu.append_item(FunctionItem("Generate monthly report", generate_monthly_report, []))
+    reports_menu.append_item(FunctionItem("Generate monthly report", generate_monthly_report))
     reports_menu.append_item(FunctionItem("Generate yearly report", not_implemented, ['Yearly report']))
 
     reports_submenu_item = SubmenuItem("Reports", submenu=reports_menu)

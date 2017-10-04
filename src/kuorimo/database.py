@@ -3,6 +3,8 @@
 
 import sqlite3
 
+DATABASE_PATH = '/Users/skocle/kuorimo.db'
+
 
 def iter_db_results(db_result, size, wrap_func):
     count = 0
@@ -21,7 +23,7 @@ def iter_db_results(db_result, size, wrap_func):
 
 class Database(object):
 
-    def __init__(self, db_name):
+    def __init__(self, db_name=DATABASE_PATH):
         self.db_name = db_name
         self.conn = None
 
