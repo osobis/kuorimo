@@ -63,7 +63,7 @@ class XlsReportGenerator(object):
             customer_number = customer['number']
             self.customers[customer_number] = customer_name
             worksheet = self.workbook.add_worksheet(customer_name)
-            worksheet.set_column('A:A', 14)
+            worksheet.set_column('A:A', 12)
             worksheet.write('A3', 'Date', self.bold_bg_gray)
             for product, cell_letter in zip(get_products(self.db), ascii_uppercase[1:]):
                 worksheet.set_column('%s:%s' % (cell_letter, cell_letter), 13)

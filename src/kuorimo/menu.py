@@ -11,7 +11,7 @@ from cursesmenu import *
 from cursesmenu.items import *
 
 from customer import (show_customers, insert_customer, show_customer,
-                                  edit_customer_by_number, get_customer_name)
+                      edit_customer_by_number, get_customer_name)
 from database import Database
 from order import show_orders, insert_order, show_order, delete_order_by_id
 from product import show_products, show_product, get_product_name, edit_product_by_number, insert_product
@@ -55,7 +55,11 @@ def add_order(d):
     order_date = ''
     while True:
         if not order_date:
-            order_date = dateutil.parser.parse(raw_input('Date [{}]: '.format(str(datetime.today().date())))).date()
+            default_order_date = str(datetime.today().date())
+            order_date = raw_input('Date [{}]: '.format(default_order_date))
+            if not order_date:
+                order_date = default_order_date
+            order_date = dateutil.parser.parse(order_date).date()
             order_date = str(order_date)
         else:
             input_str = 'Date [{}]: '.format(order_date)

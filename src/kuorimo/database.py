@@ -42,7 +42,7 @@ class Database(object):
     def get_cursor(self, row_factory=None):
 
         if not self.conn:
-            self.conn = sqlite3.connect(self.db_name)
+            self.conn = sqlite3.connect(self.db_name, check_same_thread=False)
 
         cursor = self.conn.cursor()
         cursor.row_factory = row_factory or self._dict_factory
