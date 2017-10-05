@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+import os
 
-DATABASE_PATH = '/Users/skocle/kuorimo.db'
+# use those paths as valid paths to the database
+DATABASE_PATHS = ['/Users/skocle/kuorimo.db',
+                  '/Users/kirstikoivula/kuorimo.db',
+                  r'C:\kuorimo\kuorimo.db']
 
 
 def iter_db_results(db_result, size, wrap_func):
@@ -23,9 +27,16 @@ def iter_db_results(db_result, size, wrap_func):
 
 class Database(object):
 
-    def __init__(self, db_name=DATABASE_PATH):
-        self.db_name = db_name
+    def __init__(self, db_name=None):
+
+        self.db_name = db_name or self.get_db_path()
         self.conn = None
+
+    @staticmethod
+    def get_db_path():
+        for path in DATABASE_PATHS:
+            if os.path.exists(path):
+                return path
 
     @staticmethod
     def _dict_factory(_cursor, row):
