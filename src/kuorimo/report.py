@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import unicodedata
 from collections import defaultdict
 from string import ascii_uppercase
 
@@ -59,7 +60,11 @@ class XlsReportGenerator(object):
 
     def generate_workbook(self):
         for customer in get_customers(self.db):
-            customer_name = customer['name']
+            customer_name = unicodedata.normalize('NFD', customer['name']).encode('ascii', 'ignore')
+            customer_name = customer_name.replace('/', '_')
+            customer_name = customer_name.replace('?', '_')
+            customer_name = customer_name.replace('*', '_')
+            customer_name = customer_name.replace(':', '_')
             customer_number = customer['number']
             self.customers[customer_number] = customer_name
             worksheet = self.workbook.add_worksheet(customer_name)
@@ -77,7 +82,7 @@ class XlsReportGenerator(object):
         dates = sorted(reports.keys())
 
         # print the name of the customer to be able to generate PDF file
-        customer_text = "{}/{}".format(customer_number, customer_name.upper())
+        customer_text = "{}/{}".format(customer_number, customer_name)
         self.worksheets[customer_number].merge_range('A1:C1', customer_text, self.merge_format)
 
         cell_number = 4
