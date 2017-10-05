@@ -11,10 +11,10 @@ from cursesmenu import *
 from cursesmenu.items import *
 
 from customer import (show_customers, insert_customer, show_customer,
-                      edit_customer_by_number, get_customer_name)
+                      edit_customer_by_number, get_customer_name, get_customers)
 from database import Database
 from order import show_orders, insert_order, show_order, delete_order_by_id
-from product import show_products, show_product, get_product_name, edit_product_by_number, insert_product
+from product import show_products, show_product, get_product_name, edit_product_by_number, insert_product, get_products
 from report import generate_report
 
 
@@ -176,6 +176,30 @@ def generate_monthly_report():
         print ("ERROR: Failed to create report. Error: ", str(err))
 
 
+@press_enter
+def generate_customers_list(d):
+    home_dir = expanduser("~")
+    path = os.path.join(home_dir, 'kuorimo_customers.txt')
+    with open(path, 'w') as fp:
+        fp.write("Customers List\n")
+        fp.write("=========================\n\n")
+        for customer in get_customers(d):
+            fp.write(str(customer['number']).rjust(2) + '. ' + customer['name'].encode('utf-8') + '\n')
+    print 'Customers list can be found at {}'.format(path)
+
+
+@press_enter
+def generate_products_list(d):
+    home_dir = expanduser("~")
+    path = os.path.join(home_dir, 'kuorimo_products.txt')
+    with open(path, 'w') as fp:
+        fp.write("Products List\n")
+        fp.write("=========================\n\n")
+        for customer in get_products(d):
+            fp.write(str(customer['number']).rjust(2) + '. ' + customer['name'].encode('utf-8') + '\n')
+    print 'Products list can be found at {}'.format(path)
+
+
 def menu():
 
     d = Database()
@@ -188,6 +212,7 @@ def menu():
     customers_menu.append_item(FunctionItem("Show customers", print_customers, [d, 20]))
     customers_menu.append_item(FunctionItem("Add customer", add_customer, [d]))
     customers_menu.append_item(FunctionItem("Edit customer", modify_customer, [d]))
+    customers_menu.append_item(FunctionItem("Generate customers list", generate_customers_list, [d]))
 
     customers_submenu_item = SubmenuItem("Customers", submenu=customers_menu)
     customers_submenu_item.set_menu(main_menu)
@@ -198,6 +223,7 @@ def menu():
     products_menu.append_item(FunctionItem("Show products", print_products, [d, 20]))
     products_menu.append_item(FunctionItem("Add product", add_product, [d]))
     products_menu.append_item(FunctionItem("Edit product", modify_product, [d]))
+    products_menu.append_item(FunctionItem("Generate products list", generate_products_list, [d]))
 
     products_submenu_item = SubmenuItem("Products", submenu=products_menu)
     products_submenu_item.set_menu(main_menu)

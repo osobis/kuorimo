@@ -67,7 +67,7 @@ class XlsReportGenerator(object):
             customer_name = customer_name.replace(':', '_')
             customer_number = customer['number']
             self.customers[customer_number] = customer_name
-            worksheet = self.workbook.add_worksheet(customer_name)
+            worksheet = self.workbook.add_worksheet(customer_name[:30])
             worksheet.set_column('A:A', 12)
             worksheet.write('A3', 'Date', self.bold_bg_gray)
             for product, cell_letter in zip(get_products(self.db), ascii_uppercase[1:]):
@@ -83,7 +83,7 @@ class XlsReportGenerator(object):
 
         # print the name of the customer to be able to generate PDF file
         customer_text = "{}/{}".format(customer_number, customer_name)
-        self.worksheets[customer_number].merge_range('A1:C1', customer_text, self.merge_format)
+        self.worksheets[customer_number].merge_range('A1:F1', customer_text, self.merge_format)
 
         cell_number = 4
         for date in dates:
