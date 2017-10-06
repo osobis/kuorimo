@@ -9,7 +9,7 @@ from string import ascii_uppercase
 import xlsxwriter
 from database import Database
 
-from customer import get_customers
+from customer import get_customers_by_number
 from product import get_products
 
 
@@ -59,7 +59,7 @@ class XlsReportGenerator(object):
         self.products = {}
 
     def generate_workbook(self):
-        for customer in get_customers(self.db):
+        for customer in get_customers_by_number(self.db):
             customer_name = unicodedata.normalize('NFD', customer['name']).encode('ascii', 'ignore')
             customer_name = customer_name.replace('/', '_')
             customer_name = customer_name.replace('?', '_')
@@ -67,7 +67,7 @@ class XlsReportGenerator(object):
             customer_name = customer_name.replace(':', '_')
             customer_number = customer['number']
             self.customers[customer_number] = customer_name
-            worksheet = self.workbook.add_worksheet(customer_name[:30])
+            worksheet = self.workbook.add_worksheet(str(customer_number))
             worksheet.set_column('A:A', 12)
             worksheet.write('A3', 'Date', self.bold_bg_gray)
             for product, cell_letter in zip(get_products(self.db), ascii_uppercase[1:]):

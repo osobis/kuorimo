@@ -23,7 +23,7 @@ def show_orders(d, year=None, month=None, size=20):
                 JOIN customer ON orders.cust_number=customer.number
                 JOIN product ON orders.prod_number = product.number
                 WHERE strftime('%Y%m', orders.date) = ?
-                ORDER BY orders.date DESC, customer.name
+                ORDER BY orders.id DESC
                 """
     date = year + month
     db_result = cursor.execute(query, (date, ))

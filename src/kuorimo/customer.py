@@ -20,6 +20,14 @@ def get_customers(d):
     return r
 
 
+def get_customers_by_number(d):
+    cursor = d.get_cursor()
+    db_result = cursor.execute("""SELECT * FROM customer ORDER by number ASC""")
+    r = list(db_result)
+    cursor.close()
+    return r
+
+
 def show_customer(d, number):
     cursor = d.get_cursor()
     db_result = cursor.execute("SELECT * FROM customer WHERE number=?", (number, ))
