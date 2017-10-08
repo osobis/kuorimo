@@ -18,6 +18,11 @@ from product import show_products, show_product, get_product_name, edit_product_
 from report import generate_report
 
 
+def create_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+
 def press_enter(f):
     @wraps(f)
     def wrapped(*args, **kwargs):
@@ -201,6 +206,8 @@ def generate_products_list(d):
 
 
 def menu():
+
+    create_dir(os.path.join(expanduser("~"), 'kuorimo_data'))
 
     d = Database()
 
