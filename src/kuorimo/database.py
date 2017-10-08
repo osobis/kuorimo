@@ -3,11 +3,11 @@
 
 import sqlite3
 import os
+from os.path import expanduser
+from magic import get_home_dir
 
 # use those paths as valid paths to the database
-DATABASE_PATHS = ['/Users/skocle/kuorimo.db',
-                  '/Users/kirstikoivula/kuorimo.db',
-                  r'C:\kuorimo\kuorimo.db']
+DATABASE_PATHS = []
 
 
 def iter_db_results(db_result, size, wrap_func):
@@ -29,14 +29,8 @@ class Database(object):
 
     def __init__(self, db_name=None):
 
-        self.db_name = db_name or self.get_db_path()
+        self.db_name = db_name or os.path.join(get_home_dir(), 'kuorimo_data', 'database', 'kuorimo.db')
         self.conn = None
-
-    @staticmethod
-    def get_db_path():
-        for path in DATABASE_PATHS:
-            if os.path.exists(path):
-                return path
 
     @staticmethod
     def _dict_factory(_cursor, row):

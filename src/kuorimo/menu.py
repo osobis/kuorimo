@@ -15,7 +15,11 @@ from customer import (show_customers, insert_customer, show_customer,
 from database import Database
 from order import show_orders, insert_order, show_order, delete_order_by_id
 from product import show_products, show_product, get_product_name, edit_product_by_number, insert_product, get_products
-from report import generate_report
+from report import generate_report, generate_text_report
+from magic import get_home_dir
+
+
+HOME_DIR = get_home_dir()
 
 
 def create_dir(directory):
@@ -169,11 +173,11 @@ def modify_product(d):
 @press_enter
 def generate_monthly_report():
 
-    home_dir = expanduser("~")
-    print 'To generate the xls report please specify the following:'
+    home_dir = HOME_DIR
+    print 'To generate xls report please specify the following:'
     year = raw_input('Enter year (YYYY): ')
     month = raw_input('Enter month (MM): ')
-    path = os.path.join(home_dir, "{}-{}.xlsx".format(year, month.zfill(2)))
+    path = os.path.join(home_dir, 'kuorimo_data', 'xls_reports', "{}-{}.xlsx".format(year, month.zfill(2)))
     try:
         if generate_report(year, month, path):
             print 'Report can be found at {}'.format(path)
@@ -182,9 +186,26 @@ def generate_monthly_report():
 
 
 @press_enter
+def generate_monthly_text_report(db):
+
+    home_dir = HOME_DIR
+    path = os.path.join(home_dir, 'kuorimo_data', 'text_reports')
+    print 'To generate text reports please specify the following:'
+    year = raw_input('Enter year (YYYY): ')
+    month = raw_input('Enter month (MM): ')
+    try:
+        for customer in get_customers(db):
+            generate_text_report(db, customer['number'], year, month, path)
+        print 'Reports can be found at {}'.format(path)
+    except Exception, err:
+        print ("ERROR: Failed to create report. Error: ", str(err))
+
+
+@press_enter
 def generate_customers_list(d):
-    home_dir = expanduser("~")
-    path = os.path.join(home_dir, 'kuorimo_customers.txt')
+
+    home_dir = HOME_DIR
+    path = os.path.join(home_dir, 'kuorimo_data', 'text_reports', 'kuorimo_customers.txt')
     with open(path, 'w') as fp:
         fp.write("Customers List\n")
         fp.write("=========================\n\n")
@@ -195,8 +216,9 @@ def generate_customers_list(d):
 
 @press_enter
 def generate_products_list(d):
-    home_dir = expanduser("~")
-    path = os.path.join(home_dir, 'kuorimo_products.txt')
+
+    home_dir = HOME_DIR
+    path = os.path.join(home_dir, 'kuorimo_data', 'text_reports', 'kuorimo_products.txt')
     with open(path, 'w') as fp:
         fp.write("Products List\n")
         fp.write("=========================\n\n")
@@ -207,7 +229,12 @@ def generate_products_list(d):
 
 def menu():
 
-    create_dir(os.path.join(expanduser("~"), 'kuorimo_data'))
+    create_dir(os.path.join(HOME_DIR, 'kuorimo_data'))
+    create_dir(os.path.join(HOME_DIR, 'kuorimo_data', 'database'))
+    create_dir(os.path.join(HOME_DIR, 'kuorimo_data', 'xls_reports'))
+    create_dir(os.path.join(HOME_DIR, 'kuorimo_data', 'text_reports'))
+    create_dir(os.path.join(HOME_DIR, 'kuorimo_data', 'database_archive'))
+
 
     d = Database()
 
@@ -248,9 +275,10 @@ def menu():
     # Reports
     reports_menu = CursesMenu("Reports")
 
-    reports_menu.append_item(FunctionItem("Generate daily report", not_implemented, ['Daily report']))
-    reports_menu.append_item(FunctionItem("Generate monthly report", generate_monthly_report))
-    reports_menu.append_item(FunctionItem("Generate yearly report", not_implemented, ['Yearly report']))
+    reports_menu.append_item(FunctionItem("Generate monthly text reports", generate_monthly_text_report, [d]))
+    reports_menu.append_item(FunctionItem("Generate monthly xls report", generate_monthly_report))
+    reports_menu.append_item(FunctionItem("Generate weekly xls report", not_implemented, ['report']))
+    reports_menu.append_item(FunctionItem("Generate daily xls report", not_implemented, ['report']))
 
     reports_submenu_item = SubmenuItem("Reports", submenu=reports_menu)
     reports_submenu_item.set_menu(main_menu)

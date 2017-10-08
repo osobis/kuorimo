@@ -9,8 +9,9 @@ from string import ascii_uppercase
 import xlsxwriter
 from database import Database
 
-from customer import get_customers_by_number
+from customer import get_customers_by_number, get_customer_name
 from product import get_products
+from order import get_orders_by_customer
 
 
 def get_report(d, customer_number, year, month):
@@ -117,5 +118,30 @@ def generate_report(year, month, path):
     return os.path.exists(path)
 
 
+def generate_text_report(db, cust_number, year, month, reports_dir):
+
+    customer_name = get_customer_name(db, cust_number)
+    report_dir_name = str(year) + str(month).zfill(2)
+    report_dir = os.path.join(reports_dir, report_dir_name)
+    if not os.path.exists(report_dir):
+        os.makedirs(report_dir)
+    path = os.path.join(report_dir, str(cust_number) + '.txt')
+    with open(path, 'w') as fp:
+        fp.write('ASIAKAS: ' + customer_name + '\n')
+        date =  str(year) + '.' + str(month)
+        fp.write('KUUKAUSI: ' + date + '\n\n\n')
+        orders_data, totals = get_orders_by_customer(db, cust_number, year, month)
+        for product_name, orders in orders_data.items():
+            fp.write('TUOTE: ' + product_name.upper() + '\n')
+            fp.write('Päivä' + 'Määrä'.rjust(48) + '\n\n')
+
+            for order in orders:
+                fp.write(order[0] + str(order[1]).rjust(40) + '\n')
+            fp.write('-' * 50 + '\n')
+            fp.write('Yhteensä' + str(totals[product_name]).rjust(42) + '\n\n\n')
+
+
 if __name__ == '__main__':
-    generate_report(2017, 9, '/Users/skocle/Desktop/demo.xlsx')
+    db = Database()
+    generate_text_reports(db, '2017', '9', '/Users/skocle/ukka_test.txt')
+
