@@ -193,10 +193,14 @@ def generate_monthly_text_report(db):
     print 'To generate text reports please specify the following:'
     year = raw_input('Enter year (YYYY): ')
     month = raw_input('Enter month (MM): ')
+    reports_count = 0
     try:
         for customer in get_customers(db):
-            generate_text_report(db, customer['number'], year, month, path)
-        print 'Reports can be found at {}'.format(path)
+            if generate_text_report(db, customer['number'], year, month, path):
+                reports_count += 1
+        print ('Reports can be found at {}'.format(path))
+        print ('Number of generated reports: {}'.format(reports_count))
+
     except Exception, err:
         print ("ERROR: Failed to create report. Error: ", str(err))
 

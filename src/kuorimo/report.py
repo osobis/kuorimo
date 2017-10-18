@@ -125,23 +125,28 @@ def generate_text_report(db, cust_number, year, month, reports_dir):
     report_dir = os.path.join(reports_dir, report_dir_name)
     if not os.path.exists(report_dir):
         os.makedirs(report_dir)
-    path = os.path.join(report_dir, str(cust_number) + '.txt')
-    with open(path, 'w') as fp:
-        fp.write('ASIAKAS: ' + customer_name + '\n')
-        date =  str(year) + '.' + str(month)
-        fp.write('KUUKAUSI: ' + date + '\n\n\n')
-        orders_data, totals = get_orders_by_customer(db, cust_number, year, month)
-        for product_name, orders in orders_data.items():
-            fp.write('TUOTE: ' + product_name.upper() + '\n')
-            fp.write('Päivä' + 'Määrä'.rjust(48) + '\n\n')
+    orders_data, totals = get_orders_by_customer(db, cust_number, year, month)
+    report_exits = False
+    if orders_data and totals:
+        path = os.path.join(report_dir, str(cust_number) + '.txt')
+        with open(path, 'w') as fp:
+            fp.write('ASIAKAS: ' + customer_name + '\n')
+            date = str(year) + '.' + str(month)
+            fp.write('KUUKAUSI: ' + date + '\n\n\n')
+            for product_name, orders in orders_data.items():
+                fp.write('TUOTE: ' + product_name.upper() + '\n')
+                fp.write('Päivä' + 'Määrä'.rjust(48) + '\n\n')
 
-            for order in orders:
-                fp.write(order[0] + str(order[1]).rjust(40) + '\n')
-            fp.write('-' * 50 + '\n')
-            fp.write('Yhteensä' + str(totals[product_name]).rjust(42) + '\n\n\n')
+                for order in orders:
+                    fp.write(order[0] + str(order[1]).rjust(40) + '\n')
+
+                fp.write('-' * 50 + '\n')
+                fp.write('Yhteensä' + str(totals[product_name]).rjust(42) + '\n\n\n')
+        report_exits = True
+    return report_exits
 
 
 if __name__ == '__main__':
     db = Database()
-    generate_text_reports(db, '2017', '9', '/Users/skocle/ukka_test.txt')
+    generate_text_report(db, '2017', '9', '/Users/skocle/ukka_test.txt')
 
